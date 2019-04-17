@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+
+    <div id="buttons">
+
+    </div>
+
+    <form action="">
+        <input type="text" id="new-topic">
+        <button id="addNewTopic">Add</button>
+    </form>
+    
+
+    <script>
+
+        var topics= ["cats", "dogs", "birds"]
+
+        function renderButtons(){
+            $("#buttons").empty()
+            for (var i = 0; i < topics.length; i++) {
+                var button = $("<button>")
+                .addClass("topic-button")
+                .text(topics[i])
+                .attr("data-topic", topics[i])
+                $("#buttons").append(button)
+            }   
+        }
+
+        renderButtons()
+
+        $(document).on("click", ".topic-button", function() {
+            console.log(this).attr("data-topic")
+
+        })
+
+        $("#addNewTopic").on("click", function() {
+            event.preventDefault();
+            var newTopic = $("#new-topic").val().trim()
+            topics.push(newTopic)
+            renderButtons()
+        })
+    
+    
+    
+    
+    </script>
+</body>
+</html>
