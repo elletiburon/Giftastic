@@ -1,57 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Sports Gifs Galore!</title>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <style>
+        .topic-button {
+            margin: 10px;
+        }
+    </style>
 </head>
+
 <body>
+    <div class="container">
 
-    <div id="buttons">
+        <div id="buttons" class="row d-flex justify-content-center">
 
+        </div>
+        <br>
+
+        <div class="row d-flex justify-content-center">
+            <form action="">
+                <input type="text" id="new-topic">
+                <button id="addNewTopic">Add</button>
+            </form>
+        </div>
+
+        <div id="gifs-go-here">
+
+        </div>
     </div>
 
-    <form action="">
-        <input type="text" id="new-topic">
-        <button id="addNewTopic">Add</button>
-    </form>
-    
 
     <script>
 
-        var topics= ["cats", "dogs", "birds"]
 
-        function renderButtons(){
+        var topics = ["racing", "soccer", "hockey"]
+
+        function displayGif() {
+            $(".gif").empty()
+
+            var gifTopic = $(this).attr("data-topic")
+
+            console.log(gifTopic)
+            var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+                gifTopic + "&api_key=7aB75J2VuKc0lUrZA5D6dQJmmo2PeMAt&limit=10";
+
+            $.ajax({
+                url: queryURL,
+                method: "GET"
+            })
+
+                .then(function (response) {
+                    console.log(queryURL);
+                    console.log(response);
+
+                    var results = response.data
+
+                    for (var i = 0; i < results.length; i++){
+                    var gifDiv = $("<div class='gif'>")
+                    var rating = results[i].rating  
+                    var p = $("<p>").text("Rating: " + rating);
+                    var gifs = $("<img>")
+
+                    gifs.attr("src", results[i].images.fixed_height.url);
+                    gifDiv.append(gifs)
+                    gifDiv.append(p)
+                    
+                    
+
+
+                    $("#gifs-go-here").prepend(gifDiv)
+                    }
+
+
+                    
+                })
+
+        }
+
+        function renderButtons() {
             $("#buttons").empty()
             for (var i = 0; i < topics.length; i++) {
                 var button = $("<button>")
-                .addClass("topic-button")
-                .text(topics[i])
-                .attr("data-topic", topics[i])
+                    .addClass("topic-button")
+                    .addClass("btn btn-primary btn-lg")
+                    .text(topics[i])
+                    .attr("data-topic", topics[i])
                 $("#buttons").append(button)
-            }   
+            }
         }
 
         renderButtons()
 
-        $(document).on("click", ".topic-button", function() {
-            console.log(this).attr("data-topic")
+        $(document).on("click", ".topic-button", displayGif)
 
-        })
 
-        $("#addNewTopic").on("click", function() {
+        $("#addNewTopic").on("click", function () {
             event.preventDefault();
             var newTopic = $("#new-topic").val().trim()
             topics.push(newTopic)
             renderButtons()
+
         })
-    
-    
-    
-    
+
+
+
+
+
+
     </script>
 </body>
+
 </html>
