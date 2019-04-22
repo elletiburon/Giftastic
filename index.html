@@ -28,7 +28,7 @@
 
         <div class="row d-flex justify-content-center">
             <form action="">
-                <input type="text" id="new-topic">
+                <input type="text" id="new-topic" placeholder="Add a Sport!">
                 <button id="addNewTopic">Add</button>
             </form>
         </div>
@@ -51,7 +51,6 @@
 
             var gifTopic = $(this).attr("data-topic")
 
-            console.log(gifTopic)
             var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
                 gifTopic + "&api_key=7aB75J2VuKc0lUrZA5D6dQJmmo2PeMAt&limit=10";
 
@@ -62,8 +61,6 @@
 
 
                 .then(function (response) {
-                    console.log(queryURL);
-                    console.log(response);
 
                     var results = response.data
 
@@ -74,37 +71,34 @@
                         var gifs = $("<img>")
 
                         gifs.attr("src", results[i].images.fixed_height_still.url);
-                        gifs.attr("data-still", results[i].images.fixed_height_still.url)
-                        gifs.attr("data-animate", results[i].images.fixed_height.url)
-                        gifs.attr("data-state", "still")
-                        gifs.addClass("gifs")
-                        gifDiv.append(gifs)
-                        gifDiv.append(p)
+                        gifs.attr("data-animate", results[i].images.fixed_height.url);
+                        gifs.attr("data-still", results[i].images.fixed_height_still.url);
+                        gifs.attr("data-state", "still");
+                        
+                       
+                        gifDiv.append(gifs);
+                        gifDiv.append(p);
 
 
 
 
                         $("#gifs-go-here").prepend(gifDiv)
 
-                        $(".gifs").on("click", function () {
+                        gifs.on("click", function () {
                             var state = $(this).attr("data-state");
-                            console.log(state)
 
                             if (state == "still") {
-                                var animateState = $(this).attr("data-animate")
-                                console.log(animateState)
-                                $(this).attr("src", animateState);
+                               
+                                $(this).attr("src", $(this).attr("data-animate"));
                                 $(this).attr("data-state", "animate");
                             }
 
                             if (state == "animate") {
-                                
                                 $(this).attr("src", $(this).attr("data-still"))
                                 $(this).attr("data-state", "still");
                             }
                         })
                     }
-
 
 
                 })
